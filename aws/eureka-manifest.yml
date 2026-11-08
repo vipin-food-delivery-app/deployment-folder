@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: eureka
+spec:
+  selector:
+    matchLabels:
+      app: eureka
+  serviceName: eureka-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: eureka
+    spec:
+      containers:
+      - name: eureka
+        image: vipiiin/eureka-server:0.0.1
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8761
+        env:
+          - name: EUREKA_SERVER_ADDRESS
+            valueFrom:
+              configMapKeyRef:
+                name: configmap 
+                key: eureka_service_address
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eureka-service
+  labels: 
+    app: eureka-service
+spec:
+  clusterIP: None
+  selector:
+    app: eureka
+  ports:
+    - protocol: TCP 
+      port: 8761
+      targetPort: 8761
+
+

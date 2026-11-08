@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userinfoapp
+  labels:
+    app: userinfoapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: userinfoapp
+  template:
+    metadata:
+      labels:
+        app: userinfoapp
+    spec:
+      containers:
+      - name: userinfoapp
+        image: vipiiin/userinfo-server:latest
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 9093
+        env:
+          - name: SPRING_DATASOURCE_URL
+            valueFrom:
+              configMapKeyRef:
+                name:  configmap
+                key:  userdb_url
+          - name: SPRING_DATASOURCE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: secret
+                key: postgres-username
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name:  secret
+                key:  postgres-password
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name:  userinfo-service
+spec:
+  selector:
+    app:  userinfoapp
+  ports:
+  - protocol:  TCP
+    port:  9093
+    targetPort:  9093
