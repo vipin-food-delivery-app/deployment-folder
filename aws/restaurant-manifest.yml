@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: restaurantapp
-        image: vipiiin/restaurantlisting-server:25
+        image: vipiiin/restaurantlisting-server:26
         imagePullPolicy: Always
         ports:
           - containerPort: 9091
