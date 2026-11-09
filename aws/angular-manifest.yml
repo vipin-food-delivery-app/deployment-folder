@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: angular-app-container
-        image: vipiiin/food-delivery-app-server:14
+        image: vipiiin/food-delivery-app-server:15
         imagePullPolicy: Always
         ports:
         - containerPort: 80
